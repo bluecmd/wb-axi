@@ -1,0 +1,6 @@
+[submodule "orpsoc-cores"]
+	path = orpsoc-cores
+	url = git@github.com:bluecmd/orpsoc-cores.git
+[submodule "verilog-arbiter"]
+	path = verilog-arbiter
+	url = git@github.com:bmartini/verilog-arbiter.git

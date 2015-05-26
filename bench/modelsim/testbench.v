@@ -142,7 +142,7 @@ EXMON_WIDTH	Width of the exclusive access monitor required.	4	-
    .wb_rst_i(sys_rst_i),
    .wb_adr_i(wb_adr),
    .wb_dat_i(wb_dat),
-   .wb_sel_i(wb_sel_i),
+   .wb_sel_i(wb_sel),
    .wb_we_i (wb_we),
    .wb_cyc_i(wb_cyc),
    .wb_stb_i(wb_stb),

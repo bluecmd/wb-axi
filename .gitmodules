@@ -1,9 +1,3 @@
-[submodule "orpsoc-cores"]
-	path = orpsoc-cores
-	url = git@github.com:bluecmd/orpsoc-cores.git
-[submodule "verilog-arbiter"]
-	path = verilog-arbiter
-	url = git@github.com:bmartini/verilog-arbiter.git
 [submodule "cores/wb_bfm"]
 	path = cores/wb_bfm
 	url = https://github.com/olofk/wb_bfm

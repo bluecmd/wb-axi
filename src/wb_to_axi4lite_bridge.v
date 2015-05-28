@@ -52,13 +52,8 @@ module wb_to_axi4lite_bridge #(
   assign wb_dat_o = m_axi_rdata;
   assign m_axi_wdata = wb_dat_i;
 
+  assign wb_ack_o = complete & (~complete_r);
   assign wb_err_o = complete & (~wb_we_i ? m_axi_rresp[1] : m_axi_bresp[1]);
-  // TEST
-  reg wb_ack_r;
-  always @(posedge wb_clk_i)
-    wb_ack_r <= complete & (~complete_r);
-  assign wb_ack_o = wb_ack_r;
-
   assign wb_rty_o = complete & wb_err_o &
     (~wb_we_i ? ~m_axi_rresp[0] : ~m_axi_bresp[0]);
 

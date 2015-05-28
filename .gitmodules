@@ -4,3 +4,12 @@
 [submodule "verilog-arbiter"]
 	path = verilog-arbiter
 	url = git@github.com:bmartini/verilog-arbiter.git
+[submodule "cores/wb_bfm"]
+	path = cores/wb_bfm
+	url = https://github.com/olofk/wb_bfm
+[submodule "cores/orpsoc-cores"]
+	path = cores/orpsoc-cores
+	url = https://github.com/openrisc/orpsoc-cores
+[submodule "cores/verilog-arbiter"]
+	path = cores/verilog-arbiter
+	url = https://github.com/bmartini/verilog-arbiter

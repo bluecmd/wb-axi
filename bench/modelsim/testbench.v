@@ -237,6 +237,7 @@ EXMON_WIDTH	Width of the exclusive access monitor required.	4	-
  // Set all IDs we drive to 0
  assign axi_awid = 0;
  assign axi_arid = 0;
+ assign axi_wid = 0;
 
  // We just set the user signals to 0
  assign axi_awuser = 0;

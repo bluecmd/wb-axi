@@ -36,24 +36,61 @@ module wb_to_axi4lite_bridge #(
   output [AW-1:0]   m_axi_araddr,
   output [AW-1:0]   m_axi_awaddr,
   output [DW-1:0]   m_axi_wdata,
-  output [3:0]      m_axi_wstrb
+  output [DW/8-1:0] m_axi_wstrb
 );
+  wire active;
+  wire complete;
+  reg complete_r;
+  reg asserted_addr_r = 0;
+  reg asserted_write_r = 0;
 
+  assign active = wb_stb_i & wb_cyc_i;
+
+  assign complete = active & (wb_we_i ? m_axi_bvalid : m_axi_rvalid);
+
+  // TODO(bluecmd): Byte mask?
   assign wb_dat_o = m_axi_rdata;
-  assign wb_ack_o = m_axi_rvalid;
-  assign wb_err_o = 0;
-  assign wb_rty_o = 0;
+  assign m_axi_wdata = wb_dat_i;
 
-  assign m_axi_arvalid = wb_stb_i;
-  assign m_axi_awvalid = wb_stb_i;
-  assign m_axi_bready = 0;
-  assign m_axi_rready = ~wb_we_i & wb_stb_i;
-  assign m_axi_wvalid = wb_we_i & wb_stb_i;
+  assign wb_err_o = complete & (~wb_we_i ? m_axi_rresp[1] : m_axi_bresp[1]);
+  // TEST
+  reg wb_ack_r;
+  always @(posedge wb_clk_i)
+    wb_ack_r <= complete & (~complete_r);
+  assign wb_ack_o = wb_ack_r;
+
+  assign wb_rty_o = complete & wb_err_o &
+    (~wb_we_i ? ~m_axi_rresp[0] : ~m_axi_bresp[0]);
+
+  assign m_axi_arvalid = active & ~wb_we_i & ~asserted_addr_r;
+  assign m_axi_awvalid = active & wb_we_i & ~asserted_addr_r;
+  assign m_axi_rready = active & ~wb_we_i;
+  assign m_axi_wvalid = active & wb_we_i & ~asserted_write_r;
   assign m_axi_arprot = 0;
   assign m_axi_awprot = 0;
   assign m_axi_araddr = wb_adr_i;
   assign m_axi_awaddr = wb_adr_i;
-  assign m_axi_wdata = wb_dat_i;
-  assign m_axi_wstrb = wb_stb_i & wb_we_i;
+  assign m_axi_wstrb = wb_we_i ? wb_sel_i : 0;
+
+  assign m_axi_bready = 1'b1;
+
+  always @(posedge wb_clk_i)
+  begin
+    complete_r <= complete;
+
+    asserted_addr_r <= asserted_addr_r;
+    asserted_write_r <= asserted_write_r;
+
+    if ((wb_we_i & m_axi_awvalid & m_axi_awready) |
+       (~wb_we_i & m_axi_arvalid & m_axi_arready))
+      asserted_addr_r <= 1'b1;
+    if (wb_we_i & m_axi_wvalid & m_axi_wready)
+      asserted_write_r <= 1'b1;
+    if (wb_ack_o)
+    begin
+      asserted_addr_r <= 0;
+      asserted_write_r <= 0;
+    end
+  end
 
 endmodule

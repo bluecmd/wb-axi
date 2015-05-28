@@ -3,7 +3,7 @@
 
 work:
 	vlog \
-		-timescale "1 ns / 1 ps" +acc\
+		-timescale "1 us / 1 ps" +acc -pedanticerrors -lint \
 		+incdir+../../orpsoc-cores/cores/wb_common/ \
 		+incdir+../../orpsoc-cores/cores/wb_bfm/wb_bfm-0/ \
 		../../orpsoc-cores/cores/wb_bfm/wb_bfm-0/wb_bfm_master.v \
@@ -11,6 +11,6 @@ work:
 		testbench.v xilinx/*.v ../../src/*.v
 
 
-sim:
+sim: work
 	vsim -i -t ps -L compile_simlib/unisims_ver work.testbench work.glbl \
 		-do sim.do

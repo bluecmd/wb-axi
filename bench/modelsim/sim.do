@@ -3,10 +3,6 @@ add wave -noupdate /testbench/err_o
 add wave -noupdate -group System /testbench/sys_clk_i
 add wave -noupdate -group System /testbench/sys_rst_i
 add wave -noupdate -group System /testbench/sys_rst_n
-add wave -noupdate -group Debug /testbench/wb_to_axi4lite_bridge_i/active
-add wave -noupdate -group Debug /testbench/wb_to_axi4lite_bridge_i/complete
-add wave -noupdate -group Debug /testbench/wb_to_axi4lite_bridge_i/complete_r
-add wave -noupdate -group Debug /testbench/wb_to_axi4lite_bridge_i/asserted*
 add wave -noupdate -group Debug /testbench/checker_i/pc_status
 add wave -noupdate -group Wishbone /testbench/wb_adr
 add wave -noupdate -group Wishbone /testbench/wb_dat
@@ -85,10 +81,12 @@ add wave -noupdate -group AXI4 /testbench/axi_rlast
 add wave -noupdate -group AXI4 /testbench/axi_rvalid
 add wave -noupdate -group AXI4 /testbench/axi_rready
 
-force -drive sim:/testbench/sys_clk_i 1 0, 0 {500 ns} -r 1000 ns
+#log -r /testbench/*
+
+force -drive sim:/testbench/sys_clk_i 1 0, 0 {50 ns} -r 100 ns
 force -drive sim:/testbench/sys_rst_i 1 0
 run 1us
 force -drive sim:/testbench/sys_rst_i 0 0
-run 30ms
+run 300ms
 
 wave zoom full
